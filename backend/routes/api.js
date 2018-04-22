@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Message = require('../models/Message')
+const Group = require('../models/Group')
 const timeseries = require('../lib/timeseries')
 const getConversations = require('../lib/conversations')
 
@@ -29,6 +30,11 @@ router.get('/timeseries/:unit', async (req, res) => {
 router.get('/conversations', async (req, res) => {
   const conversations = await getConversations()
   res.successJson(conversations)
+})
+
+router.get('/groups', async (req, res) => {
+  const groups = await Group.find()
+  res.successJson(groups)
 })
 
 module.exports = router
