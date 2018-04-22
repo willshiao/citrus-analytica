@@ -11,35 +11,61 @@ export default (function () {
   if (lineChartBox) {
     const lineCtx = lineChartBox.getContext('2d');
     lineChartBox.height = 80;
-
-    new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-          label                : 'Series A',
-          backgroundColor      : 'rgba(237, 231, 246, 0.5)',
-          borderColor          : COLORS['deep-purple-500'],
-          pointBackgroundColor : COLORS['deep-purple-700'],
+    $.getJSON('http://localhost:4000/api/timeseries/month', function(res) {
+      const data = Object.values(res.data)
+      const datasets = []
+      const firstYear = Math.min(...data.map(item => item._id.year))
+      const currentYear = (new Date()).getFullYear()
+      const currentMonth = (new Date()).getMonth() + 1
+      let years = {}
+      for(let year = firstYear; year <= currentYear; ++year) {
+        years[year.toString()] = Array(13).fill(0)
+      }
+      console.log(years)
+      data.forEach(item => {
+        // console.log('Setting years:', item._id.year.toString())
+        years[item._id.year.toString()][item._id.month] = item.count
+      })
+      const colors = Object.values(COLORS)
+      let currentColor = 1
+      for(let year in years) {
+        let data
+        if(year === currentYear.toString())
+          data = years[year].slice(1, currentMonth + 1)
+        else
+          data = years[year].slice(1)
+        datasets.push({
+          label: year,
+          backgroundColor: colors[currentColor + 1] + '80',//'rgba(237, 231, 246, 0.5)',
+          borderColor          : colors[currentColor],
+          pointBackgroundColor : colors[currentColor + 2],
           borderWidth          : 2,
-          data                 : [60, 50, 70, 60, 50, 70, 60],
-        }, {
-          label                : 'Series B',
-          backgroundColor      : 'rgba(232, 245, 233, 0.5)',
-          borderColor          : COLORS['blue-500'],
-          pointBackgroundColor : COLORS['blue-700'],
-          borderWidth          : 2,
-          data                 : [70, 75, 85, 70, 75, 85, 70],
-        }],
-      },
-
-      options: {
-        legend: {
-          display: false,
+          data
+        })
+        currentColor = (currentColor + 8) % (colors.length - 2)
+      }
+      // years = years.map(year => year.slice(1))
+      new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
+          datasets
         },
-      },
 
-    });
+        options: {
+          legend: {},
+          scales: {
+            xAxes: [{
+              time: {
+                unit: 'day'
+              }
+            }]
+          }
+        },
+
+      });
+      
+    })
   }
 
   // ------------------------------------------------------

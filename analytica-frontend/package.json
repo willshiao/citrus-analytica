@@ -52,6 +52,7 @@
     "chart.js": "^2.7.1",
     "datatables": "^1.10.13",
     "easy-pie-chart": "^2.1.7",
+    "echarts": "^4.0.4",
     "file-loader": "^1.1.5",
     "fullcalendar": "^3.6.2",
     "jquery": "^3.2.1",

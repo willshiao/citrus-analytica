@@ -2,6 +2,12 @@ const router = require('express').Router()
 const Message = require('../models/Message')
 const timeseries = require('../lib/timeseries')
 
+router.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
+
 router.get('/timeseries/:unit', async (req, res) => {
   if(!req.params.unit) return res.failMsg('Missing unit')
 
