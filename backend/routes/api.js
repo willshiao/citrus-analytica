@@ -57,7 +57,7 @@ router.get('/conversations', async (req, res) => {
     return res.successJson(cached.data)
   const conversations = await getConversations()
   const stat = new Stat({
-    type: 'wordcloud',
+    type: 'conversations',
     group: -1,
     data: conversations
   })

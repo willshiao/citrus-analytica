@@ -2,6 +2,10 @@ console.log('Loaded!!')
 // const myChart = echarts.init(document.getElementById('container'))
 const myGraph = echarts.init(document.getElementById('graphContainer'))
 
+$.getJSON(`${API_URL}/groups`, (res) => {
+  const groups = res.data.map(i => i.name)
+})
+
 function loadWordcloud() {
   $.getJSON(`${API_URL}/wordcloud`, (res) => {
     const words = res.data.map(d => [d[0], Math.round(2.5 * Math.sqrt(d[1]))])
@@ -139,6 +143,8 @@ $.getJSON(`${API_URL}/conversations`, (res) => {
     })
     // console.log(nodes)
     let count = 0
+    const sharedUsers = parseInt(url.searchParams.get('sharedUsers'), 10)
+    const shareAmount = isNaN(sharedUsers) ? 2 : sharedUsers
     d.forEach(conv => {
       const part1 = conv.value.participants;
       d.forEach(conv2 => {
@@ -148,7 +154,7 @@ $.getJSON(`${API_URL}/conversations`, (res) => {
 
         for(let participant in part1) {
           if(participant === currentUser) continue
-          if(participant in part2 && shared <= 1) {
+          if(participant in part2 && shared <= (shareAmount - 1)) {
             shared++;
           } else if(participant in part2) {
             links.push({
