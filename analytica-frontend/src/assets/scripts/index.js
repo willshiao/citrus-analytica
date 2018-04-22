@@ -8,3 +8,4 @@ import './sidebar';
 import './skycons';
 import './datatable';
 import './utils';
+import './echarts';
