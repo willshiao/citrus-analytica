@@ -7,8 +7,8 @@ const barOptions = {
   color: ['#3398DB'],
   tooltip: {
     trigger: 'axis',
-    axisPointer: { // 坐标轴指示器，坐标轴触发有效
-      type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+    axisPointer: {
+      type: 'shadow'
     }
   },
   grid: {
@@ -21,7 +21,7 @@ const barOptions = {
     {
       type: 'category',
       data: [],
-      axisTick: {
+      axisTick: { 
         alignWithLabel: true
       }
     }
@@ -57,7 +57,7 @@ $.getJSON(`${API_URL}/groups`, (res) => {
         return 0
       })
       console.log(d)
-      barOptions.xAxis.data = []
+      barOptions.xAxis[0].data = []
       const s = {
         name: $target.text(),
         type: 'bar',
