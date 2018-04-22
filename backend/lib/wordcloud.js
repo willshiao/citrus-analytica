@@ -1,8 +1,7 @@
-const mongoose = require('mongoose')
+const Message = require('../models/Message')
 
 module.exports = async function makeWordCloud() {
-  const f = await mongoose.connection.db.collection('messages')
-  return f.mapReduce( function() {
+  return Message.collection.mapReduce( function() {
         var dict = {
         'a': 1,
         'about': 1,
