@@ -119,7 +119,8 @@ setTimeout(loadWordcloud, 3000)
 $.getJSON(`${API_URL}/conversations`, (res) => {
   $.getJSON(`${API_URL}/groups`, (res2) => {
     const groups = res2.data
-    const currentUser = 'William Shiao'
+    const url = new URL(window.location);
+    const currentUser = url.searchParams.get('user') || 'William Shiao'
     const d = res.data
     const nodes = []
     const linkMap = {}
