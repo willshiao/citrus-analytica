@@ -21,7 +21,8 @@ export default (function () {
     }
 
     if ($('#sparklinedash2').length > 0) {
-      $('#sparklinedash2').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+      const data = [0, 5, 6, 10, 9, 12, 4, 9]
+      $('#sparklinedash2').sparkline([...data, ...data, ...data], {
         type: 'bar',
         height: '20',
         barWidth: '3',
@@ -31,27 +32,27 @@ export default (function () {
       });
     }
 
-    if ($('#sparklinedash3').length > 0) {
-      $('#sparklinedash3').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
-        type: 'bar',
-        height: '20',
-        barWidth: '3',
-        resize: true,
-        barSpacing: '3',
-        barColor: '#03a9f3',
-      });
-    }
+    // if ($('#sparklinedash3').length > 0) {
+    //   $('#sparklinedash3').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+    //     type: 'bar',
+    //     height: '20',
+    //     barWidth: '3',
+    //     resize: true,
+    //     barSpacing: '3',
+    //     barColor: '#03a9f3',
+    //   });
+    // }
 
-    if ($('#sparklinedash4').length > 0) {
-      $('#sparklinedash4').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
-        type: 'bar',
-        height: '20',
-        barWidth: '3',
-        resize: true,
-        barSpacing: '3',
-        barColor: '#f96262',
-      });
-    }
+    // if ($('#sparklinedash4').length > 0) {
+    //   $('#sparklinedash4').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+    //     type: 'bar',
+    //     height: '20',
+    //     barWidth: '3',
+    //     resize: true,
+    //     barSpacing: '3',
+    //     barColor: '#f96262',
+    //   });
+    // }
   };
 
   drawSparklines();
