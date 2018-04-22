@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const Message = require('../../parser/models/Message')
-const wordcloud = require('../lib/wordcloud')
+const Message = require('../models/Message')
+const timeseriesByDay = require('../lib/timeseriesByDay')
 
 router.get('/test', (req, res) => {
   res.send('OK')
@@ -12,7 +12,8 @@ router.get('/messages', async (req, res) => {
 
 router.get('/data', async (req, res) => {
   console.log('Got request')
-  const data = await wordcloud()
+  const data = await timeseriesByDay()
+  console.log('Sent request!')
   res.successJson(data)
 })
 
