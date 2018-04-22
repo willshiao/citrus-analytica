@@ -39,14 +39,18 @@ router.get('/timeseries/:unit', async (req, res) => {
 
   console.log('Got request')
   let data
-  if(req.params.unit === 'day')
-    data = await timeseries.byDay()
-  else if(req.params.unit === 'month')
-    data = await timeseries.byMonth()
-  else if(req.params.unit === 'year')
-    data = await timeseries.byYear()
-  else
-    return res.failMsg('Invalid unit')
+  if(req.params.unit === 'day') {
+      data = await
+      timeseries.byDay()
+  } else if(req.params.unit === 'month') {
+      data = await
+      timeseries.byMonth()
+  } else if(req.params.unit === 'year') {
+      data = await
+      timeseries.byYear()
+  } else {
+      return res.failMsg('Invalid unit')
+  }
   console.log('Sent response!')
   res.successJson(data)
 })
