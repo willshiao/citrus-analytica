@@ -1,6 +1,6 @@
 const Message = require('../models/Message')
 
-module.exports = async function conversations() {
+module.exports = async function conversationsByGroup(owner) {
     return Message.collection.mapReduce(function () {
         var object = {'messages': 1, 'participants': {}}
 
@@ -31,7 +31,7 @@ module.exports = async function conversations() {
         //throw JSON.stringify(total)
         return total
     }, {
+        //query: {owner},
         out: {inline: 1}
     })
-
 }
