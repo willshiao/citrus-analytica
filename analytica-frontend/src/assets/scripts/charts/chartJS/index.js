@@ -1,5 +1,6 @@
 import Chart from 'chart.js';
 import { COLORS } from '../../constants/colors';
+import { API_URL } from '../../constants/urls'
 
 export default (function () {
   // ------------------------------------------------------
@@ -11,7 +12,7 @@ export default (function () {
   if (lineChartBox) {
     const lineCtx = lineChartBox.getContext('2d');
     lineChartBox.height = 80;
-    $.getJSON('http://localhost:4000/api/timeseries/month', function(res) {
+    $.getJSON(`${API_URL}/api/timeseries/month`, function(res) {
       const data = Object.values(res.data)
       const datasets = []
       const firstYear = Math.min(...data.map(item => item._id.year))
@@ -23,7 +24,7 @@ export default (function () {
       }
       console.log(years)
       data.forEach(item => {
-        // console.log('Setting years:', item._id.year.toString())
+        // console.log('Setxting years:', item._id.year.toString())
         years[item._id.year.toString()][item._id.month] = item.count
       })
       const colors = Object.values(COLORS)
