@@ -1,0 +1,16 @@
+{
+  "name": "analyzer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "enumerate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jerry Jiang",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "config": "^1.30.0",
+    "mongoose": "^5.0.15"
+  }
+}
