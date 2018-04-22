@@ -15,7 +15,7 @@ $.getJSON(`${API_URL}/groups`, (res) => {
 function loadWordcloud() {
   $.getJSON(`${API_URL}/wordcloud`, (res) => {
     const words = res.data.map(d => [d[0], Math.round(2.5 * Math.sqrt(d[1]))])
-    console.log(words)
+    // console.log(words)
 
     const myCloud = WordCloud(document.getElementById('cloudContainer'), {
       list: words
@@ -296,7 +296,7 @@ function timeseries(year, data) {
 
     var dayTime = 3600 * 24 * 1000;
     var d = []
-    console.log('data:', data)
+    // console.log('data:', data)
     data.forEach(day => {
         if(day._id.year !== year) return false
         d.push([`${day._id.year}-${day._id.month}-${day._id.day}`, day.count])
