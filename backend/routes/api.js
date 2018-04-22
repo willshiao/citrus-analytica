@@ -3,6 +3,7 @@ const Message = require('../models/Message')
 const Group = require('../models/Group')
 const Stat = require('../models/Stat')
 const timeseries = require('../lib/timeseries')
+const scatter = require('../lib/scatter')
 const wordcloud = require('../lib/wordcloud')
 const getConversations = require('../lib/conversations')
 
@@ -10,6 +11,13 @@ router.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   next()
+})
+
+router.get('/scatter/:group', async (req, res) => {
+  const num = parseInt(req.params.group, 10)
+  if(isNaN(num)) return res.failMsg('Invalid group number!')
+  const data = await scatter(num)
+  res.successJson(data)
 })
 
 router.get('/wordcloud', async (req, res) => {

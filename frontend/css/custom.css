@@ -1,3 +1,7 @@
 #groups-tab {
     overflow: scroll;
 }
+
+.modal-dialog {
+    max-width: 1000px;
+}

@@ -1,6 +1,39 @@
 console.log('Loaded!!')
 // const myChart = echarts.init(document.getElementById('container'))
 const myGraph = echarts.init(document.getElementById('graphContainer'))
+const myBar = echarts.init(document.getElementById('barChart'))
+
+const barOptions = {
+  color: ['#3398DB'],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+      type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: [],
+      axisTick: {
+        alignWithLabel: true
+      }
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+  ]
+}
 
 $.getJSON(`${API_URL}/groups`, (res) => {
   const groups = res.data
@@ -10,9 +43,38 @@ $.getJSON(`${API_URL}/groups`, (res) => {
       <a href="navbar.html" class="chat-item" data-id="${group.id}">${group.name}</a>
     </li>`)
   })
+  $('.chat-item').on('click', (evt) => {
+    evt.preventDefault()
+    const $target = $(evt.target)
+    $('#groupModal').modal()
+    console.log('Triggered by:', $target.data('id'))
+    $('#groupModalLabel').text($target.text())
+    $.getJSON(`${API_URL}/scatter/${$target.data('id')}`, (scatter) => {
+      let d = scatter.data.map(a => [a._id.hour, a.msg])
+      d.sort((a, b) => {
+        if (a[0] > b[0]) return 1
+        if (a[0] < b[0]) return -1
+        return 0
+      })
+      console.log(d)
+      barOptions.xAxis.data = []
+      const s = {
+        name: $target.text(),
+        type: 'bar',
+        barWidth: '60%',
+        data: []
+      }
+      d.forEach(item => {
+        barOptions.xAxis.data.push((item[0] + 1).toString())
+        s.data.push(item[1])
+      })
+      barOptions.series = [s]
+      myBar.setOption(barOptions)
+    })
+  })
 })
 
-function loadWordcloud() {
+function loadWordcloud () {
   $.getJSON(`${API_URL}/wordcloud`, (res) => {
     const words = res.data.map(d => [d[0], Math.round(2.5 * Math.sqrt(d[1]))])
     // console.log(words)
@@ -20,7 +82,6 @@ function loadWordcloud() {
     const myCloud = WordCloud(document.getElementById('cloudContainer'), {
       list: words
     })
-
   })
 }
 
@@ -130,7 +191,7 @@ const g2 = echarts.init(document.getElementById('graph2'))
 $.getJSON(`${API_URL}/conversations`, (res) => {
   $.getJSON(`${API_URL}/groups`, (res2) => {
     const groups = res2.data
-    const url = new URL(window.location);
+    const url = new URL(window.location)
     const currentUser = url.searchParams.get('user') || 'William Shiao'
     const d = res.data
     const nodes = []
@@ -153,17 +214,17 @@ $.getJSON(`${API_URL}/conversations`, (res) => {
     const sharedUsers = parseInt(url.searchParams.get('sharedUsers'), 10)
     const shareAmount = isNaN(sharedUsers) ? 2 : sharedUsers
     d.forEach(conv => {
-      const part1 = conv.value.participants;
+      const part1 = conv.value.participants
       d.forEach(conv2 => {
-        if(conv === conv2) return false
+        if (conv === conv2) return false
         const part2 = conv2.value.participants
         let shared = 0
 
-        for(let participant in part1) {
-          if(participant === currentUser) continue
-          if(participant in part2 && shared <= (shareAmount - 1)) {
-            shared++;
-          } else if(participant in part2) {
+        for (let participant in part1) {
+          if (participant === currentUser) continue
+          if (participant in part2 && shared <= (shareAmount - 1)) {
+            shared++
+          } else if (participant in part2) {
             links.push({
               id: (count++).toString(),
               source: conv._id.toString(),
@@ -214,114 +275,113 @@ $.getJSON(`${API_URL}/conversations`, (res) => {
       ]
     }
     myGraph.setOption(graphOptions)
-    
   })
 })
 
 // Justin's added
 
 $.getJSON(`${API_URL}/timeseries/day`, (res) => {
-    const data = res.data
-    const graphOptions2 = {
-        title: {
-            // text: 'Messages Over Time Graph',
-            // subtext: 'Default layout',
-            // top: 'bottom',
-            // left: 'right'
-        },
-        tooltip: {
-            position: 'top',
-            formatter: function (p) {
-                var format = echarts.format.formatTime('yyyy-MM-dd', p.data[0]);
-                return format + ': ' + p.data[1];
-            }
-        },
-        visualMap: {
-            min: 0,
-            max: 1000,
-            calculable: true,
-            orient: 'vertical',
-            left: '670',
-            top: 'center'
-        },
+  const data = res.data
+  const graphOptions2 = {
+    title: {
+      // text: 'Messages Over Time Graph',
+      // subtext: 'Default layout',
+      // top: 'bottom',
+      // left: 'right'
+    },
+    tooltip: {
+      position: 'top',
+      formatter: function (p) {
+        var format = echarts.format.formatTime('yyyy-MM-dd', p.data[0])
+        return format + ': ' + p.data[1]
+      }
+    },
+    visualMap: {
+      min: 0,
+      max: 1000,
+      calculable: true,
+      orient: 'vertical',
+      left: '670',
+      top: 'center'
+    },
 
-        calendar: [
-            {
-                orient: 'vertical',
-                cellSize: [20, 'auto'],
-                bottom: 10,
-                range: '2016'
-            },
-            {
-                left: 300,
-                cellSize: [20, 'auto'],
-                bottom: 10,
-                orient: 'vertical',
-                range: '2017'
-            },
-            {
-                left: 520,
-                cellSize: [20, 'auto'],
-                bottom: 10,
-                orient: 'vertical',
-                range: '2018',
-                dayLabel: {
-                    margin: 5
-                }
-            }],
+    calendar: [
+      {
+        orient: 'vertical',
+        cellSize: [20, 'auto'],
+        bottom: 10,
+        range: '2016'
+      },
+      {
+        left: 300,
+        cellSize: [20, 'auto'],
+        bottom: 10,
+        orient: 'vertical',
+        range: '2017'
+      },
+      {
+        left: 520,
+        cellSize: [20, 'auto'],
+        bottom: 10,
+        orient: 'vertical',
+        range: '2018',
+        dayLabel: {
+          margin: 5
+        }
+      }],
 
-        series: [{
-            type: 'heatmap',
-            coordinateSystem: 'calendar',
-            calendarIndex: 0,
-            data: timeseries(2016, data)
-        }, {
-            type: 'heatmap',
-            coordinateSystem: 'calendar',
-            calendarIndex: 1,
-            data: timeseries(2017, data)
-        }, {
-            type: 'heatmap',
-            coordinateSystem: 'calendar',
-            calendarIndex: 2,
-            data: timeseries(2018, data)
-        }]
-    }
-    g2.setOption(graphOptions2)
+    series: [{
+      type: 'heatmap',
+      coordinateSystem: 'calendar',
+      calendarIndex: 0,
+      data: timeseries(2016, data)
+    }, {
+      type: 'heatmap',
+      coordinateSystem: 'calendar',
+      calendarIndex: 1,
+      data: timeseries(2017, data)
+    }, {
+      type: 'heatmap',
+      coordinateSystem: 'calendar',
+      calendarIndex: 2,
+      data: timeseries(2018, data)
+    }]
+  }
+  g2.setOption(graphOptions2)
 })
 
-function timeseries(year, data) {
-    // var date = +echarts.number.parseDate(year + '-01-01');
-    // var end = +echarts.number.parseDate((+year + 1) + '-01-01');
+function timeseries (year, data) {
+  // var date = +echarts.number.parseDate(year + '-01-01');
+  // var end = +echarts.number.parseDate((+year + 1) + '-01-01');
 
-    var dayTime = 3600 * 24 * 1000;
-    var d = []
-    // console.log('data:', data)
-    data.forEach(day => {
-        if(day._id.year !== year) return false
-        d.push([`${day._id.year}-${day._id.month}-${day._id.day}`, day.count])
-    })
-    return d
-    // for (let y in data) {
-    //     if (y == year) {
-    //         let dd = data[y]
-    //         console.log(dd)
-    //         for (var time = date; time < end; time += dayTime) {
-    //             // let dd = []
-    //             // dd = data[y]//.map(entry => entry.count)
-    //             // let m = dd.map(entry => entry.count)
-    //             // for (let i in dd) {
-    //                 d.push([
-    //                     echarts.format.formatTime('yyyy-MM-dd', time),
-    //                     dd.count
-    //                 ]);
-    //             // }
-    //             // d.push([
-    //             //     echarts.format.formatTime('yyyy-MM-dd', time),
-    //             //     data[y].count
-    //             // ]);
-    //         }
-    //         return d;
-    //     }
-    // }
+  var dayTime = 3600 * 24 * 1000
+  var d = []
+  // console.log('data:', data)
+  data.forEach(day => {
+    if (day._id.year !== year) return false
+    d.push([`${day._id.year}-${day._id.month}-${day._id.day}`, day.count])
+  })
+  return d
+  // for (let y in data) {
+  //     if (y == year) {
+  //         let dd = data[y]
+  //         console.log(dd)
+  //         for (var time = date; time < end; time += dayTime) {
+  //             // let dd = []
+  //             // dd = data[y]//.map(entry => entry.count)
+  //             // let m = dd.map(entry => entry.count)
+  //             // for (let i in dd) {
+  //                 d.push([
+  //                     echarts.format.formatTime('yyyy-MM-dd', time),
+  //                     dd.count
+  //                 ]);
+  //             // }
+  //             // d.push([
+  //             //     echarts.format.formatTime('yyyy-MM-dd', time),
+  //             //     data[y].count
+  //             // ]);
+  //         }
+  //         return d;
+  //     }
+  // }
 }
