@@ -297,7 +297,7 @@ $.getJSON(`${API_URL}/timeseries/month`, function (res) {
   $('#chartItem1').text(maxCount)
   $('#chartItem2').text(total)
   $('#chartItem3').text(Math.round(total / (12 * (currentYear - firstYear) - (12 - currentMonth)), 2))
-  $('#chartItem4').text(currentYear)
+  $('#chartItem4').text(currentYear - firstYear)
 
   const colors = Object.values(COLORS)
   let currentColor = 1
