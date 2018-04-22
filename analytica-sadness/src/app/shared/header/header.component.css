@@ -1,0 +1,20 @@
+/*body {*/
+  /*margin: 0;*/
+  /*padding: 0;*/
+/*}*/
+
+.header {
+  /*margin: 0;*/
+  /*padding: 0;*/
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#page {
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.menu {
+  padding: 15px;
+}

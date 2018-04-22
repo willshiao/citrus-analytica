@@ -1,44 +1,32 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# ----------------------------
+# Generated Files & Folders
+# ----------------------------
 
-# compiled output
-/dist
-/dist-server
-/tmp
-/out-tsc
+# [1] : Windows thumbnail cache files.
+# [2] : Folder config file.
+# [3] : Recycle Bin used on file shares.
 
-# dependencies
-/node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# e2e
-/e2e/*.js
-/e2e/*.map
-
-# System Files
+.idea
 .DS_Store
-Thumbs.db
+.sass-cache
+Thumbs.db     # [1]
+ehthumbs.db   # [1]
+Desktop.ini   # [2]
+$RECYCLE.BIN  # [3]
+
+# ----------------------------
+# Packaging
+# ----------------------------
+
+logs
+*.log
+npm-debug.log*
+node_modules
+yarn.lock
+package-lock.json
+
+# ----------------------------
+# Project Folders
+# ----------------------------
+
+build/
