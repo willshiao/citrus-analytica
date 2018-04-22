@@ -8,12 +8,14 @@ var finalizeFunc = function (key, val) {
 
 module.exports = async function scatter(owner) {
     return Message.collection.aggregate([
-                {
-                    $group: {
-                        _id: {hour: {$hour: "$time"}},
-                        uniqueValues: {$addToSet: "$sender"},
-                        msg: {$sum: 1}
-                    }
+            {
+                $group: {
+                    _id: {
+                        group: {group: "$group"},
+                        hour: {$hour: "$time"}
+                    },
+                    uniqueValues: {$addToSet: "$sender"},
+                    msg: {$sum: 1}
                 }
-            ]
+            }]
         )}
