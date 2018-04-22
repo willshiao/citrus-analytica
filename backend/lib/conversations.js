@@ -36,8 +36,8 @@ module.exports = async function conversationsByGroup(owner) {
 
         //throw JSON.stringify(total)
         return total
-    }, {
-        //query: {owner},
+    },
+    {
         out: {inline: 1},
         finalize: finalizeFunc
     })
