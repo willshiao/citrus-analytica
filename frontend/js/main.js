@@ -65,7 +65,7 @@ $.getJSON(`${API_URL}/groups`, (res) => {
         data: []
       }
       d.forEach(item => {
-        barOptions.xAxis.data.push((item[0] + 1).toString())
+        barOptions.xAxis[0].data.push((item[0] + 1).toString())
         s.data.push(item[1])
       })
       barOptions.series = [s]
