@@ -88,6 +88,7 @@ async function main () {
     console.log('Inserted', messages.length, 'messages!')
   })
   console.log('Done!')
+  return
 }
 
 main()
