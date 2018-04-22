@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Message = require('../models/Message')
 const timeseries = require('../lib/timeseries')
+const getConversations = require('../lib/conversations')
 
 router.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -23,6 +24,11 @@ router.get('/timeseries/:unit', async (req, res) => {
     return res.failMsg('Invalid unit')
   console.log('Sent response!')
   res.successJson(data)
+})
+
+router.get('/conversations', async (req, res) => {
+  const conversations = await getConversations()
+  res.successJson(conversations)
 })
 
 module.exports = router
