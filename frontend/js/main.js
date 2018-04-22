@@ -3,7 +3,13 @@ console.log('Loaded!!')
 const myGraph = echarts.init(document.getElementById('graphContainer'))
 
 $.getJSON(`${API_URL}/groups`, (res) => {
-  const groups = res.data.map(i => i.name)
+  const groups = res.data
+  groups.forEach(group => {
+    $('#chatCollapse').append(`
+    <li>
+      <a href="navbar.html" class="chat-item" data-id="${group.id}">${group.name}</a>
+    </li>`)
+  })
 })
 
 function loadWordcloud() {
