@@ -11,7 +11,7 @@ export default (function () {
 
   if (lineChartBox) {
     const lineCtx = lineChartBox.getContext('2d');
-    lineChartBox.height = 80;
+    lineChartBox.height = 100;
     $.getJSON(`${API_URL}/api/timeseries/month`, function(res) {
       const data = Object.values(res.data)
       const datasets = []
@@ -23,10 +23,20 @@ export default (function () {
         years[year.toString()] = Array(13).fill(0)
       }
       console.log(years)
+
+      let maxCount = 0
+      let total = 0
       data.forEach(item => {
-        // console.log('Setxting years:', item._id.year.toString())
         years[item._id.year.toString()][item._id.month] = item.count
+        maxCount = Math.max(maxCount, item.count)
+        total += item.count
       })
+    
+      $('#chartItem1').text(maxCount)
+      $('#chartItem2').text(total)
+      $('#chartItem3').text(Math.round(total / (12 * (currentYear - firstYear) - (12 - currentMonth)), 2))
+      $('#chartItem4').text(currentYear)
+
       const colors = Object.values(COLORS)
       let currentColor = 1
       for(let year in years) {
