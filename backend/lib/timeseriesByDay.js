@@ -4,9 +4,9 @@ const Message = require('../models/Message.js')
 
 module.exports = async function (owner) {
   return Message.aggregate([
-    // {
-    //   $match: {owner}
-    // },
+    {
+      $match: {owner}
+    },
     {
       $group: {
         _id: {
