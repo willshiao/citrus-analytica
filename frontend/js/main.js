@@ -103,51 +103,89 @@ const myGraph = echarts.init(document.getElementById('graphContainer'))
 // myChart.setOption(option)
 
 $.getJSON(`${API_URL}/conversations`, (res) => {
-  const d = res.data
-  const nodes = []
-  d.forEach(conv => {
-    nodes.push({
-      itemStyle: null,
-      symbolSize: Math.log(conv.value.messages),
-      value: conv.value.messages,
-      y: null,
-      x: null,
-      dragabble: true
+  $.getJSON(`${API_URL}/groups`, (res2) => {
+    const groups = res2.data
+    const currentUser = 'William Shiao'
+    const d = res.data
+    const nodes = []
+    const linkMap = {}
+    const links = []
+    d.forEach(conv => {
+      nodes.push({
+        id: conv._id.toString(),
+        name: groups.find((item) => item.id === conv._id).name,
+        itemStyle: null,
+        symbolSize: 4 * Math.log(conv.value.messages),
+        value: conv.value.messages,
+        y: null,
+        x: null,
+        draggable: true
+      })
     })
-  })
-  console.log(nodes)
-  const graphOptions = {
-    title: {
-      text: 'Conversation Graph',
-      subtext: 'Default layout',
-      top: 'bottom',
-      left: 'right'
-    },
-    tooltip: {},
-    // legend: [{
-    //   data: categories.map(function (a) {
-    //     return a.name
-    //   })
-    // }],
-    animation: false,
-    series: [
-      {
-        name: 'Conversation Graph',
-        type: 'graph',
-        layout: 'force',
-        data: nodes,
-        links: [],
-        roam: true,
-        label: {
-          normal: {
-            position: 'right'
+    console.log(nodes)
+    let count = 0
+    d.forEach(conv => {
+      const part1 = conv.value.participants;
+      d.forEach(conv2 => {
+        if(conv === conv2) return false
+        const part2 = conv2.value.participants
+        let shared = 0
+
+        for(let participant in part1) {
+          if(participant === currentUser) continue
+          if(participant in part2 && shared <= 1) {
+            shared++;
+          } else if(participant in part2) {
+            links.push({
+              id: (count++).toString(),
+              source: conv._id.toString(),
+              target: conv2._id.toString()
+            })
           }
-        },
-        force: {
-          repulsion: 100
         }
-      }
-    ]
-  }
-  myGraph.setOption(graphOptions)
+      })
+    })
+    // console.log(linkMap)
+    // for(let target in linkMap) {
+    //   links.push({
+    //     id: (count++).toString(),
+    //     source: target,
+    //     target: linkMap[target]
+    //   })
+    // }
+    console.log(nodes)
+    const graphOptions = {
+      title: {
+        text: 'Conversation Graph',
+        subtext: 'Default layout',
+        top: 'bottom',
+        left: 'right'
+      },
+      tooltip: {},
+      legend: [{
+        data: []
+      }],
+      animation: false,
+      series: [
+        {
+          name: 'Conversation Graph',
+          type: 'graph',
+          layout: 'force',
+          data: nodes,
+          links,
+          roam: true,
+          label: {
+            normal: {
+              position: 'right'
+            }
+          },
+          force: {
+            repulsion: 100
+          }
+        }
+      ]
+    }
+    myGraph.setOption(graphOptions)
+    
+  })
 })
