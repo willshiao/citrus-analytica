@@ -194,7 +194,7 @@ $.getJSON(`${API_URL}/conversations`, (res) => {
             }
           },
           force: {
-            repulsion: 200
+            repulsion: 100
           }
         }
       ]
