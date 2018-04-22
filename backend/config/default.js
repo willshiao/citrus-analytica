@@ -1,6 +1,6 @@
 module.exports = {
   site: {
-    port: 3000
+    port: 4000
   },
   db: {
     uri: 'mongodb://localhost/citrus-analytica'

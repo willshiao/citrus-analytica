@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const Message = require('../models/Message')
-const timeseriesByDay = require('../lib/timeseriesByDay')
 const wordcloud = require('../lib/wordcloud')
 
 router.get('/test', (req, res) => {

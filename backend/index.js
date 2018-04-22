@@ -8,9 +8,11 @@ const { ErrorHandler } = require('./lib/errorHandlers')
 
 require('./lib/extendExpress').extendResponse(express.response)
 const indexRoute = require('./routes/index')
+const apiRoute = require('./routes/api')
 
 const app = express()
 app.use(indexRoute)
+app.use('/api', apiRoute)
 // app.use(express.static('public'))
 app.use(ErrorHandler)
 
