@@ -1,33 +1,28 @@
-const stoplist = require('stoplist.json')
-const Messages = require('../../parser/models/Message.js')
+const stoplist = require('./stoplist')
+const Message = require('../../parser/models/Message.js')
+const User = require('../../parser/models/User.js')
 
 // query is a json object ex {owner: 1}
 module.exports.enumerate = function (query, cb) {
-  const o = {},
-    self = this
+  const o = {};
   o.map = function () {
-    var dict = stoplist
-    var newmsg = this.msg.toLowerCase().split(/[\[\]('")]+/).join('')
-    newmsg = newmsg.split(/[,\n.\s!?"'\t{}:;<>\/\\#$@%^&*()`~\-+=]+/)
+    var newmsg = this.msg.split(' ');
+    // var newmsg = this.msg.toLowerCase().split(/[\[\]('")]+/).join('');
+    // newmsg = newmsg.split(/[,\n.\s!?"'\t{}:;<>\/\\#$@%^&*()`~\-+=]+/);
 
     for (var i = 0; i < newmsg.length; i++) {
-      if (newmsg[i].length < 1000 && newmsg[i].length > 0 && !dict[newmsg[i]]) {
-        emit(newmsg[i], 1)
+      if (newmsg[i].length < 1000 && newmsg[i].length > 0) {
+        emit(newmsg[i], 1);
       }
-    }
-  }
+    };
+  };
 
   o.reduce = function (k, vals) {
-    var total = 0
+    return 5;
+  };
+  // o.query = query
 
-    for (var i = 0; i < values.length; i++) {
-      total += values[i]
-    }
-    return total
-  }
-  o.query = query
-
-  return Messages.mapReduce(o, cb)
+  return Message.mapReduce(o)
 }
 
 /*

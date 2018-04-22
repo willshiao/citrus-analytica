@@ -2,6 +2,9 @@ module.exports = {
   site: {
     port: 3000
   },
+  db: {
+    uri: 'mongodb://localhost/citrus-analytica'
+  },
   logger: {  // Settings for the logger, passed to winston
     settings: {
       level: 'debug',
