@@ -76,7 +76,10 @@ $.getJSON(`${API_URL}/groups`, (res) => {
 
 function loadWordcloud () {
   $.getJSON(`${API_URL}/wordcloud`, (res) => {
-    const words = res.data.map(d => [d[0], Math.round(2.5 * Math.sqrt(d[1]))])
+    const url = new URL(window.location)
+    const num = parseFloat(url.searchParams.get('wordScale'))
+    const scaleFactor = isNaN(num) ? 2.5 : num
+    const words = res.data.map(d => [d[0], Math.round(scaleFactor * Math.sqrt(d[1]))])
     // console.log(words)
 
     const myCloud = WordCloud(document.getElementById('cloudContainer'), {
