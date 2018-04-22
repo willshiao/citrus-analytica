@@ -1,5 +1,11 @@
 const Message = require('../models/Message')
 
+var finalizeFunc = function (key, val) {
+    val.numParticipants = Object.keys(val.participants).length
+
+    return val
+}
+
 module.exports = async function conversationsByGroup(owner) {
     return Message.collection.mapReduce(function () {
         var object = {'messages': 1, 'participants': {}}
@@ -32,6 +38,7 @@ module.exports = async function conversationsByGroup(owner) {
         return total
     }, {
         //query: {owner},
-        out: {inline: 1}
+        out: {inline: 1},
+        finalize: finalizeFunc
     })
 }
